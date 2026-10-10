@@ -1,0 +1,50 @@
+# CafeGo — Social Launch Copy (/brag)
+
+---
+### Option 1: X (Twitter) / Threads (Punchy & Direct)
+Google gave it 4.9 stars. The matcha was pure syrup. 🤡
+
+Tired of fake 5-star stranger reviews and paid food bloggers, so we built CafeGo:
+🌿 Full-screen 3D sage-minimalist cafe to explore
+👥 Reviews vouched ONLY by your real friends & mutuals
+☁️ Cloud speech bubbles with unfiltered venue tips
+🥐 3D & AR tabletop food inspector to preview fusion dishes before visiting
+
+Stop trusting strangers. Taste the truth with your squad.
+🔗 cafego.app
+
+#buildinpublic #webgl #threejs #augmentedreality #foodtech #cafehopping
+
+---
+### Option 2: LinkedIn / Showcase (Product Story)
+How many times have you visited a cafe because Google Maps said "4.8 stars", only to realize the reviews were completely inflated by bots and paid promos?
+
+We wanted a better way to discover cafes and restaurants—one rooted in real-world trust.
+
+Introducing CafeGo: a friend-powered discovery network built as a complete 3D spatial web application using Three.js and Augmented Reality.
+
+Key features:
+1. Friend-Confidence Matching: You only see recommendations from people whose tastebuds you actually know and trust.
+2. 3D Spatial Walkthrough: Step into a modern sage-minimalist cafe with fluted oak bars, the signature wavy lounge (*"Maybe coffee is addicted to me?"*), and Barista Trishi.
+3. Conversational Cloud Bubbles: Eavesdrop on candid friend tips (like Wi-Fi speeds, quiet work corners, and dishes to avoid).
+4. AR Tabletop Scanner: Project 3D fusion dishes directly onto your room's table via device camera pass-through.
+
+Built with React, Three.js, WebGL, Web Audio, and Tailwind CSS.
+
+Check it out and let me know what you think! ☕
+
+---
+### Option 3: Hacker News / Product Hunt (Show HN)
+Show HN: CafeGo – Friend-Powered Cafe & Restaurant Discovery in 3D WebGL + AR
+
+We built CafeGo to solve review inflation on Google Maps and Yelp. Instead of relying on anonymous strangers, CafeGo syncs with your friend squad to surface authentic dining recommendations, candid venue tips (acoustics, Wi-Fi speed, pet perks), and must-try fusion dishes.
+
+The entire web app is an interactive 3D spatial world with:
+- WebGL architectural modeling inspired by modern sage-minimalist interior design
+- Raycast click-to-walk navigation with proximity cloud speech bubbles
+- Interactive 3D dish turntable & Augmented Reality camera pass-through
+- Web Audio sound synthesizer for tactile UI and ambient cafe acoustics
+
+Stack: React 19, Three.js, WebGL, Tailwind CSS v4, Motion.
+Live demo: cafego.app
+Feedback welcome!

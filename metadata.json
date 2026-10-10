@@ -1,0 +1,6 @@
+{
+  "name": "CafeGo - Friend-Powered Cafe & Restaurant Discovery",
+  "description": "Discover authentic cafes and restaurants vouched by your real friends, not fake 5-star stranger reviews. Full-screen 3D immersive cafe experience inspired by modern sage-minimalist aesthetics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

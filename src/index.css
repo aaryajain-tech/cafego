@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+/* Claymorphism tactile classes */
+.clay-card {
+  background: #ffffff;
+  border-radius: 1.75rem;
+  box-shadow: 
+    inset 3px 3px 6px rgba(255, 255, 255, 0.9),
+    inset -3px -3px 6px rgba(180, 150, 130, 0.18),
+    0 12px 28px -6px rgba(130, 95, 70, 0.12),
+    0 4px 10px -2px rgba(130, 95, 70, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.clay-card-warm {
+  background: #FDF9F3;
+  border-radius: 1.75rem;
+  box-shadow: 
+    inset 3px 3px 6px rgba(255, 255, 255, 0.95),
+    inset -3px -3px 6px rgba(190, 155, 130, 0.2),
+    0 14px 30px -8px rgba(120, 85, 60, 0.14),
+    0 6px 12px -3px rgba(120, 85, 60, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.clay-card-dark {
+  background: #2C221B;
+  color: #FAF4EB;
+  border-radius: 1.75rem;
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.12),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.4),
+    0 16px 32px -8px rgba(35, 25, 20, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.clay-btn-primary {
+  background: #E07A5F;
+  color: #ffffff;
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 4px rgba(140, 50, 30, 0.3),
+    0 8px 18px -4px rgba(224, 122, 95, 0.45);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+    inset -2px -2px 4px rgba(140, 50, 30, 0.4),
+    0 12px 24px -4px rgba(224, 122, 95, 0.55);
+}
+
+.clay-btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: 
+    inset 3px 3px 6px rgba(120, 40, 20, 0.4),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.2),
+    0 4px 8px -2px rgba(224, 122, 95, 0.3);
+}
+
+.clay-btn-secondary {
+  background: #EAE2D6;
+  color: #3D2F25;
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.8),
+    inset -2px -2px 4px rgba(160, 140, 120, 0.25),
+    0 6px 14px -3px rgba(120, 95, 75, 0.15);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-btn-secondary:hover {
+  transform: translateY(-2px);
+  background: #ECE5DA;
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+    inset -2px -2px 4px rgba(160, 140, 120, 0.3),
+    0 10px 20px -3px rgba(120, 95, 75, 0.2);
+}
+
+.clay-btn-sage {
+  background: #739066;
+  color: #ffffff;
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.35),
+    inset -2px -2px 4px rgba(60, 90, 50, 0.3),
+    0 8px 18px -4px rgba(115, 144, 102, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-inset {
+  background: #F3ECE1;
+  box-shadow: 
+    inset 2px 2px 5px rgba(140, 115, 95, 0.2),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(210, 190, 175, 0.4);
+}
+
+.clay-bubble {
+  background: #FFFFFF;
+  border-radius: 1.5rem;
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.95),
+    inset -2px -2px 4px rgba(180, 150, 130, 0.15),
+    0 10px 22px -4px rgba(100, 75, 55, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+@keyframes steamFlow {
+  0% { transform: translateY(0) scaleX(1); opacity: 0; }
+  30% { opacity: 0.7; }
+  60% { transform: translateY(-16px) scaleX(1.3); opacity: 0.5; }
+  100% { transform: translateY(-30px) scaleX(1.8); opacity: 0; }
+}
+
+.animate-steam {
+  animation: steamFlow 2.8s infinite ease-out;
+}
+
+.animate-steam-delay {
+  animation: steamFlow 3.2s infinite ease-out 1.2s;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-gentle-float {
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+@keyframes characterBob {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(-1.5deg); }
+  75% { transform: translateY(-4px) rotate(1.5deg); }
+}
+
+.animate-character-walk {
+  animation: characterBob 0.6s infinite ease-in-out;
+}
