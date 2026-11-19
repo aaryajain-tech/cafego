@@ -44,6 +44,9 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div 
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="about-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs animate-fadeIn"
       onClick={handleClose}
     >
@@ -67,10 +70,11 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
         {/* Floating Close Button */}
         <button
           onClick={handleClose}
+          aria-label="Close About CafeGo dialog"
           className="absolute top-4 right-4 p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-all hover:rotate-90 active:scale-90 cursor-pointer z-30 bg-white/70 backdrop-blur-xs shadow-2xs border border-white/60"
-          title="Close modal"
+          title="Close modal (or press Escape)"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5" aria-hidden="true" />
         </button>
 
         {/* Infused Scrollable Content Container - Custom sleek scrollbar floating cleanly inside */}
@@ -89,7 +93,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
 
             <div className="flex-1 pr-6">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <h2 className="text-2xl md:text-3xl font-extrabold text-[#2C241E] font-['Outfit'] tracking-tight">
+                <h2 id="about-modal-title" className="text-2xl md:text-3xl font-extrabold text-[#2C241E] font-['Outfit'] tracking-tight">
                   About Cafe<span className="text-[#9BB196]">Go</span>
                 </h2>
                 <span className="text-[11px] bg-[#EEF5EA] text-[#4F7344] px-2.5 py-0.5 rounded-full font-bold border border-[#D5E6CF] shadow-2xs">

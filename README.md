@@ -189,6 +189,8 @@ http://localhost:3000
 | `dev` | `npm run dev` | Starts Vite local development server on port `3000` |
 | `build` | `npm run build` | Compiles TypeScript and builds optimized production bundles to `/dist` |
 | `preview` | `npm run preview` | Locally serves the production build for testing |
+| `test` | `npm test` | Runs automated test suite covering recommendations, security, and WCAG AA accessibility |
+| `test:coverage` | `npm run test:coverage` | Runs full test runner with regression coverage |
 | `lint` | `npm run lint` | Runs TypeScript compiler checks without emitting files (`tsc --noEmit`) |
 | `clean` | `npm run clean` | Removes build output (`dist/`) and temporary build artifacts |
 

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { X, User, Coffee, Award, Calendar, Share2, Sparkles, Check, History, Edit3 } from 'lucide-react';
 import { UserProfile } from '../types';
 
+import { sanitizeInput } from '../utils/security';
+
 interface ProfileModalProps {
   user: UserProfile;
   isOpen: boolean;
@@ -23,21 +25,31 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdateUser({ name: name.trim(), username: username.trim() });
+    onUpdateUser({
+      name: sanitizeInput(name, 40) || 'Friend',
+      username: sanitizeInput(username, 30) || 'friend'
+    });
     setIsEditing(false);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
-      <div 
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="profile-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn"
+      onClick={onClose}
+    >
+      <div
         className="clay-card-warm max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 border-2 border-white shadow-2xl relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
+          aria-label="Close profile dialog"
           className="absolute top-5 right-5 p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-colors cursor-pointer"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5" aria-hidden="true" />
         </button>
 
         {/* Profile Card Header */}
@@ -45,6 +57,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
           <div
             className="w-16 h-16 rounded-3xl flex items-center justify-center text-white text-2xl font-black shadow-[inset_2px_2px_4px_rgba(255,255,255,0.5),0_8px_16px_rgba(0,0,0,0.15)] border-2 border-white"
             style={{ backgroundColor: user.avatarColor }}
+            aria-hidden="true"
           >
             {user.name.charAt(0)}
           </div>
@@ -53,7 +66,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
             {!isEditing ? (
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-2xl font-extrabold text-[#2C221B] font-['Outfit']">
+                  <h2 id="profile-modal-title" className="text-2xl font-extrabold text-[#2C221B] font-['Outfit']">
                     {user.name}
                   </h2>
                   <button

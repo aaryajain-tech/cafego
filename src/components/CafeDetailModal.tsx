@@ -37,7 +37,13 @@ export const CafeDetailModal: React.FC<CafeDetailModalProps> = ({
   const [active3DIndex, setActive3DIndex] = useState<number | null>(0);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
+    <div 
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cafe-detail-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn"
+      onClick={onClose}
+    >
       <div 
         className="clay-card-warm max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 border-2 border-white shadow-2xl relative"
         onClick={(e) => e.stopPropagation()}
@@ -45,9 +51,10 @@ export const CafeDetailModal: React.FC<CafeDetailModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
+          aria-label="Close cafe details dialog"
           className="absolute top-5 right-5 p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-colors cursor-pointer"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5" aria-hidden="true" />
         </button>
 
         {/* Modal Header */}
@@ -64,7 +71,7 @@ export const CafeDetailModal: React.FC<CafeDetailModalProps> = ({
             </span>
           </div>
 
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#2C221B] font-['Outfit']">
+          <h2 id="cafe-detail-modal-title" className="text-2xl md:text-3xl font-extrabold text-[#2C221B] font-['Outfit']">
             {cafe.name}
           </h2>
 

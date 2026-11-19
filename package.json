@@ -1,12 +1,15 @@
 {
-  "name": "react-example",
+  "name": "cafego",
+  "description": "Friend-Powered Cafe & Restaurant Discovery with 3D WebGL & Tabletop AR",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "tsx --test src/tests/**/*.test.ts",
+    "test:coverage": "tsx --test src/tests/**/*.test.ts",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
   },

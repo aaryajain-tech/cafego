@@ -31,6 +31,7 @@ interface ThreeCafeSceneProps {
   onLaunchAR?: () => void;
   onOpenDiscovery?: () => void;
   onOpenAbout?: () => void;
+  isPaused?: boolean;
 }
 
 export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
@@ -40,8 +41,14 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
   onLaunchAR,
   onOpenDiscovery,
   onOpenAbout,
+  isPaused = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isPausedRef = useRef<boolean>(isPaused);
+
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
   const [cameraMode, setCameraMode] = useState<'isometric' | 'follow' | 'counter' | 'lounge'>('isometric');
   const [activePatron, setActivePatron] = useState<CafePatron | null>(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
@@ -305,6 +312,16 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
     const vase1 = new THREE.Mesh(vaseGeo, vaseMat);
     vase1.position.set(-8, 4.8, -8.3);
     scene.add(vase1);
+
+    // Symmetrical Circular Display Alcove on Right Rear Wall near Barista side
+    const rightCircleNiche = new THREE.Mesh(circleNicheGeo, nicheMat);
+    rightCircleNiche.rotation.x = Math.PI / 2;
+    rightCircleNiche.position.set(8, 5.2, -8.6);
+    scene.add(rightCircleNiche);
+
+    const rightVase = new THREE.Mesh(vaseGeo, vaseMat);
+    rightVase.position.set(8, 4.8, -8.3);
+    scene.add(rightVase);
 
     // -------------------------------------------------------------
     // 3. BARISTA COUNTER WITH SAGE FLUTED PANELS & GLASS PASTRY DISPLAY (Ref Image 1 & 3)
@@ -585,11 +602,13 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
       scene.add(lampGlow);
     };
 
-    // Existing pendant lamp (above front seating at z = 2.5)
+    // Left side pendant lamps (2 lamps)
     addPendantLamp(-6, 2.5);
-
-    // Added to the left side of the view (above rear-left seating at z = -3.5)
     addPendantLamp(-6, -3.5);
+
+    // Opposite right side pendant lamps (2 lamps, symmetrical)
+    addPendantLamp(6.5, 2.5);
+    addPendantLamp(6.5, -3.5);
 
     scene.add(ceilingGroup);
 
@@ -976,6 +995,11 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
     const animate = () => {
       animationFrameId.current = requestAnimationFrame(animate);
 
+      // Efficiency Optimization: Pause intensive 3D rendering when tab is hidden or a full dialog is open
+      if (document.hidden || isPausedRef.current) {
+        return;
+      }
+
       // Character smooth movement
       if (characterGroupRef.current) {
         const dist = currentPosRef.current.distanceTo(targetPosRef.current);
@@ -1064,6 +1088,24 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
       window.removeEventListener('mousemove', onMouseMove);
       renderer.domElement.removeEventListener('wheel', onWheel);
       if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+
+      // Memory leak prevention: Dispose all WebGL geometries, materials, and renderer
+      try {
+        scene.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            object.geometry?.dispose();
+            if (Array.isArray(object.material)) {
+              object.material.forEach((mat) => mat.dispose());
+            } else if (object.material) {
+              object.material.dispose();
+            }
+          }
+        });
+        renderer.dispose();
+      } catch (e) {
+        // Safe disposal fallback
+      }
+
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -1112,11 +1154,22 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden select-none bg-[#F7F3EB]">
+    <div
+      className="fixed inset-0 w-full h-full overflow-hidden select-none bg-[#F7F3EB]"
+      role="region"
+      aria-label="Interactive 3D CafeGo World: Click on floor to walk, interact with barista Trishi and patrons, or switch camera views."
+    >
+      {/* Screen Reader Live Status Region */}
+      <div className="sr-only" aria-live="polite">
+        Current 3D camera angle: {cameraMode}. {activePatron ? `Interacting with ${activePatron.name}.` : 'Exploring cafe floor.'}
+      </div>
+
       {/* 1. THREE.JS 3D WEBGL FULLSCREEN CANVAS */}
       <div
         ref={containerRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing"
+        className="w-full h-full cursor-grab active:cursor-grabbing outline-none"
+        tabIndex={0}
+        aria-label="3D Cafe Viewport. Click anywhere to walk."
       />
 
       {/* 2. TOP FLOATING ARCHITECTURAL HUD */}
@@ -1166,19 +1219,25 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
         </div>
 
         {/* Spatial Camera View Modes (from reference images) */}
-        <div className="pointer-events-auto flex items-center gap-1.5 clay-bubble p-1.5 border border-white/80 shadow-md backdrop-blur-md">
+        <div
+          role="toolbar"
+          aria-label="3D Camera Angle Controls"
+          className="pointer-events-auto flex items-center gap-1.5 clay-bubble p-1.5 border border-white/80 shadow-md backdrop-blur-md"
+        >
           <button
             onClick={() => {
               setCameraMode('isometric');
               playSound('pop');
             }}
+            aria-label="Isometric 3D Camera: Overview angle inspired by architectural floorplan"
+            aria-pressed={cameraMode === 'isometric'}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${cameraMode === 'isometric'
               ? 'bg-[#2C241E] text-white shadow-xs'
               : 'text-[#6B5546] hover:bg-black/5'
               }`}
             title="Overview angle inspired by architectural floorplan"
           >
-            <Compass className="w-3.5 h-3.5" />
+            <Compass className="w-3.5 h-3.5" aria-hidden="true" />
             <span className="hidden md:inline">Isometric 3D</span>
           </button>
 
@@ -1187,13 +1246,15 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
               setCameraMode('follow');
               playSound('pop');
             }}
+            aria-label="Follow Walk Camera: Follow your character walking in 3D"
+            aria-pressed={cameraMode === 'follow'}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${cameraMode === 'follow'
               ? 'bg-[#2C241E] text-white shadow-xs'
               : 'text-[#6B5546] hover:bg-black/5'
               }`}
             title="Follow player walking in 3D"
           >
-            <Move className="w-3.5 h-3.5" />
+            <Move className="w-3.5 h-3.5" aria-hidden="true" />
             <span className="hidden md:inline">Follow Walk</span>
           </button>
 
@@ -1202,13 +1263,15 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
               setCameraMode('counter');
               playSound('pop');
             }}
+            aria-label="Fluted Bar Camera: View barista Trishi station and pastry case"
+            aria-pressed={cameraMode === 'counter'}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${cameraMode === 'counter'
               ? 'bg-[#2C241E] text-white shadow-xs'
               : 'text-[#6B5546] hover:bg-black/5'
               }`}
             title="Barista Trishi station & pastry case"
           >
-            <Coffee className="w-3.5 h-3.5 text-[#E07A5F]" />
+            <Coffee className="w-3.5 h-3.5 text-[#E07A5F]" aria-hidden="true" />
             <span className="hidden md:inline">Fluted Bar</span>
           </button>
 
@@ -1217,25 +1280,29 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
               setCameraMode('lounge');
               playSound('pop');
             }}
+            aria-label="Wavy Lounge Camera: View wavy acoustic wall and snake plant seating"
+            aria-pressed={cameraMode === 'lounge'}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${cameraMode === 'lounge'
               ? 'bg-[#2C241E] text-white shadow-xs'
               : 'text-[#6B5546] hover:bg-black/5'
               }`}
             title="Wavy Wall & Snake Plant Bench"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#9BB196]" />
+            <Sparkles className="w-3.5 h-3.5 text-[#9BB196]" aria-hidden="true" />
             <span className="hidden md:inline">Wavy Lounge</span>
           </button>
 
-          <div className="w-px h-5 bg-[#E8DFD3] mx-1" />
+          <div className="w-px h-5 bg-[#E8DFD3] mx-1" aria-hidden="true" />
 
           {/* Sound Toggle */}
           <button
             onClick={() => setIsAudioMuted(!isAudioMuted)}
+            aria-label={isAudioMuted ? 'Unmute cafe sound effects' : 'Mute cafe sound effects'}
+            aria-pressed={!isAudioMuted}
             className="p-1.5 rounded-xl text-[#7A6453] hover:bg-black/5 transition-colors cursor-pointer"
             title={isAudioMuted ? 'Unmute Sound' : 'Mute Sound'}
           >
-            {isAudioMuted ? <VolumeX className="w-4 h-4 text-red-500" /> : <Volume2 className="w-4 h-4 text-[#819B72]" />}
+            {isAudioMuted ? <VolumeX className="w-4 h-4 text-red-500" aria-hidden="true" /> : <Volume2 className="w-4 h-4 text-[#819B72]" aria-hidden="true" />}
           </button>
         </div>
       </div>

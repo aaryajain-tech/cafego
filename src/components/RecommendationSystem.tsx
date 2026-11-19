@@ -95,10 +95,12 @@ export const RecommendationSystem: React.FC<RecommendationSystemProps> = ({
 
         {/* Sort Dropdown */}
         <div className="flex items-center gap-2 text-xs font-semibold text-[#5C4A3E]">
-          <span>Sort by:</span>
+          <label htmlFor="sort-dropdown" className="font-bold">Sort by:</label>
           <select
+            id="sort-dropdown"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
+            aria-label="Sort cafes by match score, squad ranking, or vouched count"
             className="clay-inset px-3 py-2 rounded-xl text-xs font-bold text-[#2C221B] focus:outline-none cursor-pointer"
           >
             <option value="match">Highest Friend Match (%)</option>
@@ -115,20 +117,28 @@ export const RecommendationSystem: React.FC<RecommendationSystemProps> = ({
 
           {/* Search Box */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A7565]" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A7565]" aria-hidden="true" />
             <input
+              id="cafe-search-input"
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search by cafe name, fusion dish, or Chennai neighborhood"
               placeholder="Search by cafe name, fusion dish (e.g. Kimchi croissant), or neighborhood..."
               className="clay-inset w-full pl-10 pr-4 py-3 rounded-2xl text-xs md:text-sm font-semibold text-[#2C221B] placeholder:text-[#A8988B] focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
             />
           </div>
 
           {/* Type Segmented Controls (Interactive buttons) */}
-          <div className="flex items-center gap-1.5 p-1 bg-[#ECE2D2] rounded-2xl shrink-0">
+          <div
+            role="group"
+            aria-label="Filter by venue type"
+            className="flex items-center gap-1.5 p-1 bg-[#ECE2D2] rounded-2xl shrink-0"
+          >
             <button
               onClick={() => setSelectedType('all')}
+              aria-pressed={selectedType === 'all'}
+              aria-label={`All spots: ${cafes.length} places`}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedType === 'all'
                 ? 'bg-white text-[#2C221B] shadow-sm'
                 : 'text-[#6B5546] hover:text-[#2C221B]'
@@ -138,22 +148,26 @@ export const RecommendationSystem: React.FC<RecommendationSystemProps> = ({
             </button>
             <button
               onClick={() => setSelectedType('cafe')}
+              aria-pressed={selectedType === 'cafe'}
+              aria-label="Cafes only"
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${selectedType === 'cafe'
                 ? 'bg-white text-[#2C221B] shadow-sm'
                 : 'text-[#6B5546] hover:text-[#2C221B]'
                 }`}
             >
-              <Coffee className="w-3.5 h-3.5" />
+              <Coffee className="w-3.5 h-3.5" aria-hidden="true" />
               Cafes Only
             </button>
             <button
               onClick={() => setSelectedType('restaurant')}
+              aria-pressed={selectedType === 'restaurant'}
+              aria-label="Restaurants only"
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${selectedType === 'restaurant'
                 ? 'bg-white text-[#2C221B] shadow-sm'
                 : 'text-[#6B5546] hover:text-[#2C221B]'
                 }`}
             >
-              <Utensils className="w-3.5 h-3.5" />
+              <Utensils className="w-3.5 h-3.5" aria-hidden="true" />
               Restaurants
             </button>
           </div>

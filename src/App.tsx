@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThreeCafeScene } from './components/ThreeCafeScene';
 import { RecommendationSystem } from './components/RecommendationSystem';
 import { ReferralAndSquadSection } from './components/ReferralAndSquadSection';
@@ -9,6 +9,7 @@ import { ARViewerModal } from './components/ARViewerModal';
 import { AboutModal } from './components/AboutModal';
 import { INITIAL_CAFES, INITIAL_USER } from './data/mockData';
 import { Cafe, FriendReview, UserProfile, CafePatron } from './types';
+import { sanitizeInput } from './utils/security';
 import {
   Coffee,
   Search,
@@ -37,6 +38,22 @@ export default function App() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [arDishName, setArDishName] = useState('Kimchi Gouda Croissant Bake');
 
+  // Global keyboard listener (Escape key closes any open dialog)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActivePanel(null);
+        setSelectedCafe(null);
+        setReviewingCafe(null);
+        setIsProfileOpen(false);
+        setIsAROpen(false);
+        setIsAboutOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Update user state helper
   const handleUpdateUser = (updated: Partial<UserProfile>) => {
     setUser((prev) => ({
@@ -45,15 +62,23 @@ export default function App() {
     }));
   };
 
-  // Submit a new friend review
+  // Submit a new friend review with input sanitization
   const handleSubmitReview = (cafeId: string, newReview: FriendReview, fusionTried: string) => {
+    const sanitizedReview: FriendReview = {
+      ...newReview,
+      friendName: sanitizeInput(newReview.friendName, 40),
+      reviewText: sanitizeInput(newReview.reviewText, 1000),
+      whatToOrder: sanitizeInput(newReview.whatToOrder, 100),
+      whatToAvoid: newReview.whatToAvoid ? sanitizeInput(newReview.whatToAvoid, 100) : undefined,
+    };
+
     setCafes((prevCafes) =>
       prevCafes.map((cafe) => {
         if (cafe.id === cafeId) {
           return {
             ...cafe,
             friendsVouchedCount: cafe.friendsVouchedCount + 1,
-            friendReviews: [newReview, ...cafe.friendReviews],
+            friendReviews: [sanitizedReview, ...cafe.friendReviews],
           };
         }
         return cafe;
@@ -71,8 +96,8 @@ export default function App() {
             cafeName: cafeObj.name,
             visitDate: 'Just now',
             myRating: 5,
-            myNotes: newReview.reviewText,
-            fusionTried: fusionTried || 'Signature brew',
+            myNotes: sanitizedReview.reviewText,
+            fusionTried: sanitizeInput(fusionTried, 100) || 'Signature brew',
           },
           ...prev.history,
         ],
@@ -85,32 +110,51 @@ export default function App() {
     setIsAROpen(true);
   };
 
+  const isAnyModalOpen = activePanel !== null || selectedCafe !== null || reviewingCafe !== null || isProfileOpen || isAROpen || isAboutOpen;
+
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#F7F3EB] font-['Plus_Jakarta_Sans']">
+      {/* Skip to Main Navigation Link for Screen Readers & Keyboard Users */}
+      <a
+        href="#main-dock"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-50 bg-[#2C221B] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
+      >
+        Skip to navigation controls
+      </a>
 
       {/* 1. COMPLETE WEB PAGE FULLSCREEN 3D WEBGL CAFE WORLD */}
-      <ThreeCafeScene
-        user={user}
-        onUpdateUser={handleUpdateUser}
-        onLaunchAR={() => handleLaunchAR()}
-        onOpenDiscovery={() => setActivePanel('discovery')}
-        onOpenAbout={() => setIsAboutOpen(true)}
-      />
+      <main id="main-content" role="main" className="w-full h-full">
+        <ThreeCafeScene
+          user={user}
+          onUpdateUser={handleUpdateUser}
+          onLaunchAR={() => handleLaunchAR()}
+          onOpenDiscovery={() => setActivePanel('discovery')}
+          onOpenAbout={() => setIsAboutOpen(true)}
+          isPaused={isAnyModalOpen}
+        />
+      </main>
 
       {/* 2. FLOATING BOTTOM DOCK / NAVIGATION BAR */}
-      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[94%] sm:w-auto">
-        <nav className="clay-card px-3 py-2 border-2 border-white/90 shadow-2xl backdrop-blur-lg flex items-center justify-between sm:justify-center gap-1.5 sm:gap-3">
+      <div id="main-dock" className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[94%] sm:w-auto">
+        <nav 
+          role="navigation" 
+          aria-label="Main Navigation"
+          className="clay-card px-3 py-2 border-2 border-white/90 shadow-2xl backdrop-blur-lg flex items-center justify-between sm:justify-center gap-1.5 sm:gap-3"
+        >
 
           {/* Explore Places Button */}
           <button
             onClick={() => setActivePanel(activePanel === 'discovery' ? null : 'discovery')}
+            aria-label="Discovery & Reviews: Browse vouched Chennai cafes and restaurants"
+            aria-expanded={activePanel === 'discovery'}
+            aria-controls="discovery-modal"
             className={`px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activePanel === 'discovery'
               ? 'bg-[#2C241E] text-white shadow-md'
               : 'text-[#4A3B30] hover:bg-black/5'
               }`}
             title="Browse all vouched cafes, restaurants, & reviews"
           >
-            <Search className="w-4 h-4 text-[#9BB196]" />
+            <Search className="w-4 h-4 text-[#9BB196]" aria-hidden="true" />
             <span className="hidden sm:inline">Discovery & Reviews</span>
             <span className="sm:hidden">Places</span>
           </button>
@@ -118,13 +162,16 @@ export default function App() {
           {/* Friend Squads Button */}
           <button
             onClick={() => setActivePanel(activePanel === 'squads' ? null : 'squads')}
+            aria-label="Friend Squads: View squad dining circle and referral perks"
+            aria-expanded={activePanel === 'squads'}
+            aria-controls="squads-modal"
             className={`px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activePanel === 'squads'
               ? 'bg-[#2C241E] text-white shadow-md'
               : 'text-[#4A3B30] hover:bg-black/5'
               }`}
             title="Friend dining circle & referral perks"
           >
-            <Users className="w-4 h-4 text-[#E07A5F]" />
+            <Users className="w-4 h-4 text-[#E07A5F]" aria-hidden="true" />
             <span className="hidden sm:inline">Friend Squads</span>
             <span className="sm:hidden">Squads</span>
           </button>
@@ -132,10 +179,11 @@ export default function App() {
           {/* AR Tabletop Scanner Button */}
           <button
             onClick={() => handleLaunchAR()}
+            aria-label="AR Tabletop: Inspect 3D dishes in Augmented Reality on your physical table"
             className="clay-btn-primary px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md hover:scale-105 transition-transform"
             title="Inspect 3D dishes in Augmented Reality on your table"
           >
-            <Camera className="w-4 h-4" />
+            <Camera className="w-4 h-4" aria-hidden="true" />
             <span className="hidden sm:inline">AR Tabletop</span>
             <span className="sm:hidden">AR</span>
           </button>
@@ -143,10 +191,11 @@ export default function App() {
           {/* Profile & History Button */}
           <button
             onClick={() => setIsProfileOpen(true)}
+            aria-label={`User Profile: ${user.name}, ${user.coffeeTokens} coffee tokens`}
             className="px-3 py-2 rounded-2xl text-xs font-bold text-[#4A3B30] hover:bg-black/5 transition-colors flex items-center gap-1.5 cursor-pointer"
             title="Profile, visited history, & tokens"
           >
-            <div className="w-6 h-6 rounded-full bg-[#9BB196] text-white flex items-center justify-center text-xs font-black shadow-inner">
+            <div className="w-6 h-6 rounded-full bg-[#9BB196] text-white flex items-center justify-center text-xs font-black shadow-inner" aria-hidden="true">
               {user.name.charAt(0)}
             </div>
             <span className="hidden sm:inline font-mono text-[11px] bg-[#E8DFD3] px-1.5 py-0.5 rounded-md">
@@ -160,6 +209,10 @@ export default function App() {
       {/* 3. CENTERED MODAL FOR DISCOVERY & REVIEWS (Chennai, India) */}
       {activePanel === 'discovery' && (
         <div
+          id="discovery-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="discovery-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-8 bg-black/50 backdrop-blur-xs animate-fadeIn"
           onClick={() => setActivePanel(null)}
         >
@@ -170,14 +223,14 @@ export default function App() {
             {/* Modal Header with Chennai Badge */}
             <div className="p-4 sm:p-5 border-b border-[#E8DFD3] flex items-center justify-between gap-4 bg-[#F2EDE4]/70 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-2xl bg-[#9BB196] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+                <div className="w-9 h-9 rounded-2xl bg-[#9BB196] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0" aria-hidden="true">
                   <Search className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-extrabold text-xl text-[#2C221B] font-['Outfit']">
+                    <h2 id="discovery-modal-title" className="font-extrabold text-xl text-[#2C221B] font-['Outfit']">
                       CafeGo Discovery
-                    </h3>
+                    </h2>
                     <span className="text-[11px] bg-[#EEF5EA] text-[#4F7344] px-2.5 py-0.5 rounded-full font-bold border border-[#D5E6CF] shadow-2xs">
                       📍 Chennai, India
                     </span>
@@ -188,10 +241,11 @@ export default function App() {
 
               <button
                 onClick={() => setActivePanel(null)}
+                aria-label="Close Discovery and Reviews dialog"
                 className="p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-all hover:rotate-90 active:scale-90 cursor-pointer shrink-0"
-                title="Close (or tap outside to close)"
+                title="Close (or press Escape)"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
 
@@ -211,6 +265,10 @@ export default function App() {
       {/* 4. CENTERED MODAL FOR FRIEND SQUADS & REFERRALS */}
       {activePanel === 'squads' && (
         <div
+          id="squads-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="squads-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-8 bg-black/50 backdrop-blur-xs animate-fadeIn"
           onClick={() => setActivePanel(null)}
         >
@@ -220,23 +278,24 @@ export default function App() {
           >
             <div className="p-4 sm:p-5 border-b border-[#E8DFD3] flex items-center justify-between gap-4 bg-[#F2EDE4]/70 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-2xl bg-[#E07A5F] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+                <div className="w-9 h-9 rounded-2xl bg-[#E07A5F] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0" aria-hidden="true">
                   <Users className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-xl text-[#2C221B] font-['Outfit']">
+                  <h2 id="squads-modal-title" className="font-extrabold text-xl text-[#2C221B] font-['Outfit']">
                     Your Foodie Squad & Perks
-                  </h3>
+                  </h2>
                   <p className="text-xs text-[#7A6453]">Invite friends, share authentic reviews & earn coffee tokens together</p>
                 </div>
               </div>
 
               <button
                 onClick={() => setActivePanel(null)}
+                aria-label="Close Foodie Squads and Perks dialog"
                 className="p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-all hover:rotate-90 active:scale-90 cursor-pointer shrink-0"
-                title="Close (or tap outside to close)"
+                title="Close (or press Escape)"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
 

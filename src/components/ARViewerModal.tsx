@@ -111,6 +111,13 @@ export const ARViewerModal: React.FC<ARViewerModalProps> = ({
       if (stream) {
         stream.getTracks().forEach((track) => track.stop());
       }
+      if (videoRef.current && videoRef.current.srcObject) {
+        try {
+          (videoRef.current.srcObject as MediaStream).getTracks().forEach((t) => t.stop());
+        } catch {
+          // Safe track stop
+        }
+      }
     };
   }, []);
 
@@ -322,20 +329,29 @@ export const ARViewerModal: React.FC<ARViewerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-4xl h-[92vh] rounded-3xl overflow-hidden bg-[#1E1915] border-2 border-white/20 shadow-2xl flex flex-col">
+    <div 
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ar-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn"
+      onClick={onClose}
+    >
+      <div 
+        className="relative w-full max-w-4xl h-[92vh] rounded-3xl overflow-hidden bg-[#1E1915] border-2 border-white/20 shadow-2xl flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* AR Viewport Top Header */}
         <div className="p-4 bg-black/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between text-white z-20">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#E07A5F] flex items-center justify-center text-white shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-[#E07A5F] flex items-center justify-center text-white shadow-sm" aria-hidden="true">
               <Camera className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-extrabold text-base tracking-tight font-['Outfit']">
+                <h2 id="ar-modal-title" className="font-extrabold text-base tracking-tight font-['Outfit']">
                   AR Spatial Dining & Dish Inspector
-                </h3>
+                </h2>
                 <span className="text-[10px] font-bold bg-[#819B72] text-white px-2 py-0.5 rounded-full uppercase">
                   {cameraActive ? 'Live Camera Feed' : 'AR Tabletop Sim'}
                 </span>
@@ -348,9 +364,10 @@ export const ARViewerModal: React.FC<ARViewerModalProps> = ({
 
           <button
             onClick={onClose}
+            aria-label="Close Augmented Reality dish inspector dialog"
             className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 

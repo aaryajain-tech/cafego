@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Users, Gift, Share2, Copy, Check, Sparkles, Coffee, Award, ArrowRight } from 'lucide-react';
+import { Users, Gift, Share2, Copy, Check, Sparkles, Coffee, Award, ArrowRight, AlertCircle } from 'lucide-react';
 import { UserProfile } from '../types';
+import { sanitizeInput, isValidEmail } from '../utils/security';
 
 interface ReferralAndSquadSectionProps {
   user: UserProfile;
@@ -16,6 +17,7 @@ export const ReferralAndSquadSection: React.FC<ReferralAndSquadSectionProps> = (
   const [isEditingSquad, setIsEditingSquad] = useState(false);
   const [simulatedFriendEmail, setSimulatedFriendEmail] = useState('');
   const [inviteSuccess, setInviteSuccess] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   const inviteLink = `https://cafego.app/join?ref=${user.referralCode}`;
 
@@ -27,7 +29,15 @@ export const ReferralAndSquadSection: React.FC<ReferralAndSquadSectionProps> = (
 
   const handleSendInvite = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!simulatedFriendEmail) return;
+    const cleanEmail = simulatedFriendEmail.trim();
+    if (!cleanEmail) return;
+
+    if (!isValidEmail(cleanEmail)) {
+      setEmailError('Please enter a valid email address.');
+      return;
+    }
+
+    setEmailError(null);
     setInviteSuccess(true);
     onUpdateUser({
       successfulReferrals: (user.successfulReferrals || 0) + 1,
@@ -39,8 +49,9 @@ export const ReferralAndSquadSection: React.FC<ReferralAndSquadSectionProps> = (
 
   const handleSaveSquad = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newSquadName.trim()) {
-      onUpdateUser({ squadName: newSquadName.trim() });
+    const cleanName = sanitizeInput(newSquadName, 40);
+    if (cleanName.trim()) {
+      onUpdateUser({ squadName: cleanName.trim() });
       setIsEditingSquad(false);
     }
   };
@@ -222,25 +233,36 @@ export const ReferralAndSquadSection: React.FC<ReferralAndSquadSectionProps> = (
 
             {/* Right: Direct Email Invite */}
             <form onSubmit={handleSendInvite} className="space-y-1.5">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#7A6453]">
+              <label htmlFor="friend-email-input" className="block text-xs font-bold uppercase tracking-wider text-[#7A6453]">
                 Invite A Friend Directly via Email
               </label>
               <div className="flex items-center gap-2">
                 <input
+                  id="friend-email-input"
                   type="email"
                   required
                   value={simulatedFriendEmail}
-                  onChange={(e) => setSimulatedFriendEmail(e.target.value)}
+                  onChange={(e) => {
+                    setSimulatedFriendEmail(e.target.value);
+                    if (emailError) setEmailError(null);
+                  }}
                   placeholder="friend@example.com"
-                  className="clay-inset flex-1 px-3 py-2.5 rounded-xl text-xs font-medium text-[#2C221B] focus:outline-none"
+                  className="clay-inset flex-1 px-3 py-2.5 rounded-xl text-xs font-medium text-[#2C221B] focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
                 />
                 <button
                   type="submit"
+                  aria-label="Send email invite and earn 10 coffee tokens"
                   className="clay-btn-secondary px-4 py-2.5 rounded-xl text-xs font-bold text-[#2C221B] cursor-pointer shrink-0 whitespace-nowrap"
                 >
                   Send Invite (+10 ☕)
                 </button>
               </div>
+              {emailError && (
+                <div role="alert" className="text-xs font-bold text-[#C84B31] bg-[#FDF0ED] p-2 rounded-xl border border-[#F5C7BC] flex items-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>{emailError}</span>
+                </div>
+              )}
             </form>
           </div>
 
