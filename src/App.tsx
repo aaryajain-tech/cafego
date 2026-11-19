@@ -6,6 +6,7 @@ import { CafeDetailModal } from './components/CafeDetailModal';
 import { ReviewModal } from './components/ReviewModal';
 import { ProfileModal } from './components/ProfileModal';
 import { ARViewerModal } from './components/ARViewerModal';
+import { AboutModal } from './components/AboutModal';
 import { INITIAL_CAFES, INITIAL_USER } from './data/mockData';
 import { Cafe, FriendReview, UserProfile, CafePatron } from './types';
 import { 
@@ -33,6 +34,7 @@ export default function App() {
   const [activePanel, setActivePanel] = useState<'discovery' | 'squads' | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAROpen, setIsAROpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [arDishName, setArDishName] = useState('Kimchi Gouda Croissant Bake');
 
   // Update user state helper
@@ -92,6 +94,7 @@ export default function App() {
         onUpdateUser={handleUpdateUser}
         onLaunchAR={() => handleLaunchAR()}
         onOpenDiscovery={() => setActivePanel('discovery')}
+        onOpenAbout={() => setIsAboutOpen(true)}
       />
 
       {/* 2. FLOATING BOTTOM DOCK / NAVIGATION BAR */}
@@ -252,6 +255,11 @@ export default function App() {
         isOpen={isAROpen}
         onClose={() => setIsAROpen(false)}
         initialItemName={arDishName}
+      />
+
+      <AboutModal
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
       />
 
     </div>

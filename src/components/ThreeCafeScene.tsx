@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
-import { 
-  Camera, 
-  RotateCcw, 
-  Eye, 
-  UserCheck, 
-  Sparkles, 
-  Move, 
-  Compass, 
-  Volume2, 
-  VolumeX, 
+import {
+  Camera,
+  RotateCcw,
+  Eye,
+  UserCheck,
+  Sparkles,
+  Move,
+  Compass,
+  Volume2,
+  VolumeX,
   ArrowRight,
   Coffee,
   CheckCircle2,
@@ -17,7 +17,8 @@ import {
   Layers,
   MapPin,
   Utensils,
-  Maximize2
+  Maximize2,
+  Info
 } from 'lucide-react';
 import { CAFE_PATRONS } from '../data/mockData';
 import { CafePatron, UserProfile } from '../types';
@@ -29,6 +30,7 @@ interface ThreeCafeSceneProps {
   onSelectPatron?: (patron: CafePatron) => void;
   onLaunchAR?: () => void;
   onOpenDiscovery?: () => void;
+  onOpenAbout?: () => void;
 }
 
 export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
@@ -37,6 +39,7 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
   onSelectPatron,
   onLaunchAR,
   onOpenDiscovery,
+  onOpenAbout,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [cameraMode, setCameraMode] = useState<'isometric' | 'follow' | 'counter' | 'lounge'>('isometric');
@@ -582,19 +585,197 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
     scene.add(ceilingGroup);
 
     // -------------------------------------------------------------
-    // 7. ENTRANCE POSTER EASEL: "CafeGo" (Ref Image 1)
+    // 7. ENTRANCE CHALKBOARD EASEL: "Welcome to CafeGo" (Ref Image 1)
     // -------------------------------------------------------------
+    const createChalkboardTexture = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 768;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+
+      // 1. Deep slate chalkboard green base
+      ctx.fillStyle = '#1D2A20';
+      ctx.fillRect(0, 0, 512, 768);
+
+      // Chalk dust & eraser smudge texture
+      for (let i = 0; i < 220; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 768;
+        const r = Math.random() * 35 + 8;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.025)';
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Hand-drawn double chalk border
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(26, 26, 460, 716);
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 8]);
+      ctx.strokeRect(36, 36, 440, 696);
+      ctx.setLineDash([]);
+
+      // Corner chalk loops
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.lineWidth = 3;
+      [[42, 42], [470, 42], [42, 726], [470, 726]].forEach(([cx, cy]) => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      // Hand-drawn chalk steaming coffee cup illustration at top
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.9)';
+      ctx.shadowBlur = 6;
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+      ctx.lineWidth = 4.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Cup body
+      ctx.beginPath();
+      ctx.arc(256, 138, 34, 0, Math.PI, false);
+      ctx.lineTo(290, 114);
+      ctx.lineTo(222, 114);
+      ctx.closePath();
+      ctx.stroke();
+
+      // Cup handle
+      ctx.beginPath();
+      ctx.arc(294, 128, 13, -Math.PI / 2, Math.PI / 2);
+      ctx.stroke();
+
+      // Saucer
+      ctx.beginPath();
+      ctx.moveTo(210, 175);
+      ctx.lineTo(302, 175);
+      ctx.stroke();
+
+      // Wavy steam lines
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(242, 98);
+      ctx.bezierCurveTo(236, 80, 248, 68, 244, 48);
+      ctx.moveTo(256, 94);
+      ctx.bezierCurveTo(252, 74, 264, 62, 258, 44);
+      ctx.moveTo(270, 98);
+      ctx.bezierCurveTo(266, 80, 278, 68, 272, 48);
+      ctx.stroke();
+
+      // Chalk sparkle stars
+      ctx.font = '22px sans-serif';
+      ctx.fillText('✦', 160, 140);
+      ctx.fillText('✦', 345, 140);
+
+      // Handwritten Chalk Text
+      ctx.textAlign = 'center';
+
+      // 1. "Welcome" - Handwritten white chalk script
+      ctx.font = 'italic 700 66px "Caveat", "Brush Script MT", "Comic Sans MS", cursive, sans-serif';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.85)';
+      ctx.shadowBlur = 7;
+      ctx.fillText('Welcome', 256, 270);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+      ctx.fillText('Welcome', 257, 271); // textured double pass
+
+      // 2. "to" - handwritten white chalk script
+      ctx.font = 'italic 600 42px "Caveat", "Comic Sans MS", cursive, sans-serif';
+      ctx.fillStyle = 'rgba(250, 245, 235, 0.95)';
+      ctx.shadowBlur = 5;
+      ctx.fillText('~ to ~', 256, 338);
+
+      // 3. "CafeGo" - Bold hand-drawn chalk title
+      ctx.font = '900 84px "Outfit", "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.95)';
+      ctx.shadowBlur = 10;
+      ctx.fillText('CafeGo', 256, 442);
+
+      // Warm chalk underline swirl
+      ctx.lineWidth = 4.5;
+      ctx.strokeStyle = 'rgba(240, 150, 120, 0.95)'; // terracotta chalk accent
+      ctx.beginPath();
+      ctx.moveTo(115, 472);
+      ctx.bezierCurveTo(180, 484, 330, 462, 395, 476);
+      ctx.stroke();
+
+      // 4. Chalk sub-banner
+      ctx.font = 'bold 28px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = 'rgba(215, 235, 210, 0.95)'; // sage chalk accent
+      ctx.shadowColor = 'rgba(155, 177, 150, 0.7)';
+      ctx.shadowBlur = 5;
+      ctx.fillText('FRIEND-POWERED', 256, 540);
+
+      // 5. Chalk bottom notes
+      ctx.font = 'italic 600 32px "Caveat", cursive, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.shadowBlur = 4;
+      ctx.fillText('Honest Bites · Real Friends', 256, 605);
+
+      // Chalk icons at base
+      ctx.font = '28px sans-serif';
+      ctx.fillText('☕   ♡   ✨', 256, 665);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.anisotropy = 8;
+      texture.needsUpdate = true;
+      return texture;
+    };
+
     const easelGroup = new THREE.Group();
     easelGroup.position.set(-2.8, 0, 8.5);
     easelGroup.rotation.y = 0.25;
 
-    const boardGeo = new THREE.BoxGeometry(1.4, 2.1, 0.08);
-    const boardMat = new THREE.MeshStandardMaterial({ color: '#819B72', roughness: 0.6 }); // sage A-frame board
-    const boardMesh = new THREE.Mesh(boardGeo, boardMat);
-    boardMesh.position.y = 1.3;
-    boardMesh.rotation.x = -0.15;
-    boardMesh.castShadow = true;
-    easelGroup.add(boardMesh);
+    // Wooden Chalkboard Outer Frame
+    const frameGeo = new THREE.BoxGeometry(1.44, 2.14, 0.08);
+    const frameMesh = new THREE.Mesh(frameGeo, oakWoodMat);
+    frameMesh.position.y = 1.3;
+    frameMesh.rotation.x = -0.15;
+    frameMesh.castShadow = true;
+    easelGroup.add(frameMesh);
+
+    // Front Chalkboard Face with "Welcome to CafeGo" handwritten chalk texture
+    const chalkTexture = createChalkboardTexture();
+    if (chalkTexture) {
+      const chalkGeo = new THREE.PlaneGeometry(1.34, 2.04);
+      const chalkMat = new THREE.MeshStandardMaterial({
+        map: chalkTexture,
+        roughness: 0.9,
+        metalness: 0.05,
+      });
+      const chalkMesh = new THREE.Mesh(chalkGeo, chalkMat);
+      chalkMesh.position.set(0, 1.3, 0.045);
+      chalkMesh.rotation.x = -0.15;
+      easelGroup.add(chalkMesh);
+    }
+
+    // Wooden A-Frame Legs touching the ground
+    const legGeo = new THREE.CylinderGeometry(0.04, 0.04, 2.3, 8);
+    const leg1 = new THREE.Mesh(legGeo, oakWoodMat);
+    leg1.position.set(-0.68, 1.15, -0.05);
+    leg1.rotation.x = -0.15;
+    leg1.castShadow = true;
+    easelGroup.add(leg1);
+
+    const leg2 = new THREE.Mesh(legGeo, oakWoodMat);
+    leg2.position.set(0.68, 1.15, -0.05);
+    leg2.rotation.x = -0.15;
+    leg2.castShadow = true;
+    easelGroup.add(leg2);
+
+    // Rear A-frame kickstand leg
+    const kickstand = new THREE.Mesh(legGeo, oakWoodMat);
+    kickstand.position.set(0, 1.1, -0.32);
+    kickstand.rotation.x = 0.22;
+    kickstand.castShadow = true;
+    easelGroup.add(kickstand);
 
     scene.add(easelGroup);
 
@@ -987,25 +1168,49 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
       />
 
       {/* 2. TOP FLOATING ARCHITECTURAL HUD */}
-      <div className="absolute top-4 left-4 right-4 z-30 flex items-center justify-between gap-4 pointer-events-none">
-        {/* Brand Lockup */}
-        <div className="pointer-events-auto flex items-center gap-3 clay-bubble px-4 py-2 border border-white/80 backdrop-blur-md shadow-md">
-          <div className="w-9 h-9 rounded-2xl bg-[#9BB196] flex items-center justify-center text-white shadow-sm">
-            <Coffee className="w-5 h-5 text-white" />
+      <div className="absolute top-4 left-4 right-4 z-30 flex items-start justify-between gap-4 pointer-events-none">
+        {/* Brand Lockup & About Button */}
+        <div className="flex flex-col items-stretch gap-2 pointer-events-auto">
+          <div className="flex items-center gap-3 clay-bubble px-4 py-2 border border-white/80 backdrop-blur-md shadow-md">
+            <div className="w-9 h-9 rounded-2xl bg-[#9BB196] flex items-center justify-center text-white shadow-sm shrink-0">
+              <Coffee className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-extrabold text-[#2C241E] font-['Outfit'] tracking-tight">
+                  Cafe<span className="text-[#9BB196]">Go</span>
+                </span>
+                <span className="text-[10px] bg-[#EEF5EA] text-[#4F7344] px-2 py-0.5 rounded-full font-bold">
+                  3D World
+                </span>
+              </div>
+              <p className="text-[10px] text-[#7A6453] hidden sm:block">
+                Friend-Powered Discovery · Sage Minimalist Space
+              </p>
+            </div>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-extrabold text-[#2C241E] font-['Outfit'] tracking-tight">
-                Cafe<span className="text-[#9BB196]">Go</span>
-              </span>
-              <span className="text-[10px] bg-[#EEF5EA] text-[#4F7344] px-2 py-0.5 rounded-full font-bold">
-                3D World
+
+          {/* About CafeGo Button - Matching size & presence of the card above */}
+          <button
+            onClick={() => {
+              if (onOpenAbout) onOpenAbout();
+              playSound('pop');
+            }}
+            className="w-full clay-bubble px-3.5 py-2.5 rounded-2xl font-bold text-[#2C241E] bg-white/95 hover:bg-white border border-white/90 shadow-md backdrop-blur-md transition-all flex items-center justify-between group hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            title="Learn about CafeGo, mission, features, and creators"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-[#EEF5EA] text-[#4F7344] flex items-center justify-center group-hover:bg-[#9BB196] group-hover:text-white transition-all shadow-xs shrink-0">
+                <Info className="w-4 h-4" />
+              </div>
+              <span className="text-sm md:text-[15px] font-extrabold text-[#2C241E] font-['Outfit'] tracking-tight">
+                About CafeGo
               </span>
             </div>
-            <p className="text-[10px] text-[#7A6453] hidden sm:block">
-              Friend-Powered Discovery · Sage Minimalist Space
-            </p>
-          </div>
+            <div className="w-7 h-7 rounded-xl bg-[#FAF6EE] flex items-center justify-center text-[#739066] group-hover:bg-[#E07A5F] group-hover:text-white transition-all shrink-0 shadow-2xs">
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </button>
         </div>
 
         {/* Spatial Camera View Modes (from reference images) */}
@@ -1015,11 +1220,10 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
               setCameraMode('isometric');
               playSound('pop');
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              cameraMode === 'isometric'
-                ? 'bg-[#2C241E] text-white shadow-xs'
-                : 'text-[#6B5546] hover:bg-black/5'
-            }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${cameraMode === 'isometric'
+              ? 'bg-[#2C241E] text-white shadow-xs'
+              : 'text-[#6B5546] hover:bg-black/5'
+              }`}
             title="Overview angle inspired by architectural floorplan"
           >
             <Compass className="w-3.5 h-3.5" />
@@ -1031,11 +1235,10 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
               setCameraMode('follow');
               playSound('pop');
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              cameraMode === 'follow'
-                ? 'bg-[#2C241E] text-white shadow-xs'
-                : 'text-[#6B5546] hover:bg-black/5'
-            }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${cameraMode === 'follow'
+              ? 'bg-[#2C241E] text-white shadow-xs'
+              : 'text-[#6B5546] hover:bg-black/5'
+              }`}
             title="Follow player walking in 3D"
           >
             <Move className="w-3.5 h-3.5" />
@@ -1047,11 +1250,10 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
               setCameraMode('counter');
               playSound('pop');
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              cameraMode === 'counter'
-                ? 'bg-[#2C241E] text-white shadow-xs'
-                : 'text-[#6B5546] hover:bg-black/5'
-            }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${cameraMode === 'counter'
+              ? 'bg-[#2C241E] text-white shadow-xs'
+              : 'text-[#6B5546] hover:bg-black/5'
+              }`}
             title="Barista Trishi station & pastry case"
           >
             <Coffee className="w-3.5 h-3.5 text-[#E07A5F]" />
@@ -1063,11 +1265,10 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
               setCameraMode('lounge');
               playSound('pop');
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              cameraMode === 'lounge'
-                ? 'bg-[#2C241E] text-white shadow-xs'
-                : 'text-[#6B5546] hover:bg-black/5'
-            }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${cameraMode === 'lounge'
+              ? 'bg-[#2C241E] text-white shadow-xs'
+              : 'text-[#6B5546] hover:bg-black/5'
+              }`}
             title="Wavy Wall & Snake Plant Bench"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#9BB196]" />
@@ -1092,7 +1293,7 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
         <div className="absolute top-20 md:top-24 left-1/2 -translate-x-1/2 z-30 pointer-events-none animate-fadeIn flex flex-col items-center max-w-[92%]">
           {/* Main Cloud Body */}
           <div className="pointer-events-auto bg-white/95 backdrop-blur-md px-4 py-2.5 sm:px-5 sm:py-3 rounded-full border border-white/90 shadow-[0_14px_30px_rgba(70,55,40,0.12),inset_0_2px_4px_rgba(255,255,255,0.9)] relative flex items-center gap-3 max-w-sm sm:max-w-md">
-            
+
             {/* Puffy Cloud Lobes */}
             <div className="absolute -top-2 left-6 w-7 h-7 rounded-full bg-white/90 -z-10 pointer-events-none shadow-xs" />
             <div className="absolute -top-3.5 left-14 w-9 h-9 rounded-full bg-white/95 -z-10 pointer-events-none shadow-xs" />
@@ -1155,7 +1356,7 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
       {showStoryModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-sm animate-fadeIn">
           <div className="clay-card-warm max-w-lg w-full p-6 md:p-8 border-2 border-white shadow-2xl relative space-y-6">
-            
+
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-[#E8DFD3]">
               <div className="flex items-center gap-2">

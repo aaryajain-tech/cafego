@@ -149,3 +149,81 @@
 .animate-character-walk {
   animation: characterBob 0.6s infinite ease-in-out;
 }
+
+@keyframes modalSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-modal-pop {
+  animation: modalSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.delay-75 { animation-delay: 75ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-225 { animation-delay: 225ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-375 { animation-delay: 375ms; }
+.delay-450 { animation-delay: 450ms; }
+
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 2.4s ease-in-out infinite;
+}
+
+/* Infused subtle custom scrollbar for popups & modals */
+.infused-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 177, 150, 0.5) transparent;
+}
+
+.infused-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.infused-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 14px 0;
+}
+
+.infused-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(155, 177, 150, 0.45);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+.infused-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 122, 95, 0.75);
+}
+
+.infused-scrollbar::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
