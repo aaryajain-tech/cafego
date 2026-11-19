@@ -45,7 +45,7 @@ export interface Cafe {
   type: 'cafe' | 'restaurant';
   oneLinerTag: string;
   neighborhood: string;
-  priceTier: '$' | '$$' | '$$$';
+  priceTier: '₹' | '₹₹' | '₹₹₹' | '$' | '$$' | '$$$';
   friendMatchScore: number; // 0 - 100%
   friendsVouchedCount: number;
   criteria: CafeReviewCriteria;

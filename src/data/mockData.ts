@@ -5,20 +5,20 @@ export const INITIAL_CAFES: Cafe[] = [
     id: 'cafe-1',
     name: 'Mellow Hearth Roasters',
     type: 'cafe',
-    oneLinerTag: 'The 3pm cortado sanctuary with zero influencer noise',
-    neighborhood: 'Old Mill District',
-    priceTier: '$$',
+    oneLinerTag: 'The 3pm cortado & pour-over sanctuary away from TTK Road traffic',
+    neighborhood: 'Alwarpet, Chennai',
+    priceTier: '₹₹',
     friendMatchScore: 98,
     friendsVouchedCount: 7,
     rankingPosition: 1,
     criteria: {
       foodScore: 4.8,
-      foodComment: 'Flaky sourdough melts and brown butter cardamom buns baked every 2 hours.',
+      foodComment: 'Flaky sourdough melts and brown butter cardamom buns baked fresh every 2 hours.',
       drinksScore: 4.9,
-      drinksComment: 'Single-origin Ethiopian pour-over with jasmine floral notes, dialed-in perfectly.',
+      drinksComment: 'Single-origin Araku Valley pour-over with jasmine floral notes, dialed-in on Kalita Wave.',
       ambienceScore: 4.7,
       ambienceComment: 'Warm terracotta tiles, soft acoustics, natural linen blinds, and quiet background lo-fi.',
-      menuStyle: 'Nordic Minimalist Bakery & Specialty Micro-Roastery'
+      menuStyle: 'Specialty Micro-Roastery & Artisanal Sourdough Bakery'
     },
     facilities: {
       vegFriendly: true,
@@ -32,17 +32,17 @@ export const INITIAL_CAFES: Cafe[] = [
     fusionItems: [
       {
         id: 'fi-1',
-        name: 'Cardamom Espresso Tonic & Orange Peel',
+        name: 'Cardamom Espresso Tonic & Valencia Orange Peel',
         description: 'Double shot slow-dripped over artisanal tonic with freshly crushed green cardamom and flamed citrus.',
-        price: '$6.50',
-        friendReaction: 'Rohan: "Sounds weird, but tastes like liquid sunshine. Drink it immediately."'
+        price: '₹280',
+        friendReaction: 'Rohan: "Sounds weird, but tastes like liquid sunshine in the Chennai heat. Drink it immediately."'
       },
       {
         id: 'fi-2',
         name: 'Kimchi Gouda Croissant Bake',
         description: '24-hour aged kimchi sautéed in brown butter tucked inside twice-baked croissant dough with Dutch gouda.',
-        price: '$7.80',
-        friendReaction: 'Sarah: "The exact umami kick you need when you are hungover or coding."'
+        price: '₹340',
+        friendReaction: 'Sarah: "The exact umami kick you need when you are hungover or coding in Alwarpet."'
       }
     ],
     friendReviews: [
@@ -52,9 +52,9 @@ export const INITIAL_CAFES: Cafe[] = [
         avatarColor: '#E07A5F',
         avatarEmoji: '👩🏻‍💻',
         verdict: 'Must Visit',
-        reviewText: 'Google reviews kept talking about the matcha, which was honestly mid. But the pour-over and the kimchi croissant are 10/10. Sit in the back garden bench next to the olive tree!',
+        reviewText: 'Google reviews kept talking about the generic cold coffee, which was honestly mid. But the Araku pour-over and the kimchi croissant are 10/10. Sit in the back garden bench next to the frangipani tree!',
         whatToOrder: 'Cardamom Espresso Tonic + Kimchi Croissant',
-        whatToAvoid: 'The iced matcha latte is sweetened powder syrup',
+        whatToAvoid: 'The iced flavored latte is sweetened powder syrup',
         visitedDate: '3 days ago',
         friendTrustBadge: 'Foodie Bestie · 18 shared visits'
       },
@@ -64,36 +64,36 @@ export const INITIAL_CAFES: Cafe[] = [
         avatarColor: '#819B72',
         avatarEmoji: '☕',
         verdict: 'Good for Work',
-        reviewText: 'Wi-Fi hits 180 Mbps. Every table on the left wall has discrete power outlets hidden beneath the wooden bench. Baristas never rush you even if you stay 3 hours.',
-        whatToOrder: 'Single-origin batch brew (refills are only $2)',
+        reviewText: 'Wi-Fi hits 180 Mbps. Every table on the left wall has discrete power outlets hidden beneath the teak bench. Baristas never rush you even during busy Alwarpet afternoons.',
+        whatToOrder: 'Single-origin batch brew (refills are only ₹90)',
         visitedDate: 'Last weekend',
         friendTrustBadge: 'Coworking Pal · 9 shared visits'
       }
     ],
     strangerTruthComparison: {
       strangerRating: 4.2,
-      strangerQuote: '"Wait time was 12 mins and no oat milk pumpkin spice syrup! 1 star!" — Karen99 (Reviewer level 1)',
-      friendTruthSummary: 'Your squad rates this 4.9. Don’t go for generic syrups; go for the handcrafted single-origin beans and serene work corners.'
+      strangerQuote: '"Wait time was 12 mins and no pumpkin spice syrup! 1 star!" — Tourist_44',
+      friendTruthSummary: 'Your Chennai squad rates this 4.9. Don’t go for generic syrups; go for the handcrafted single-origin beans and serene work corners.'
     }
   },
   {
     id: 'cafe-2',
     name: 'The Dueling Dosa & Dice',
     type: 'cafe',
-    oneLinerTag: 'Crispy fermented crepes meet 200+ tabletop board games',
-    neighborhood: 'Arts Crossing',
-    priceTier: '$',
+    oneLinerTag: 'Paper-thin ghee podi dosas meet 200+ tabletop board games near Luz Corner',
+    neighborhood: 'Mylapore, Chennai',
+    priceTier: '₹',
     friendMatchScore: 94,
     friendsVouchedCount: 5,
     rankingPosition: 2,
     criteria: {
       foodScore: 4.9,
-      foodComment: 'Paper-thin ghee podi dosas paired with unexpectedly spicy truffle dips.',
+      foodComment: 'Paper-thin ghee podi dosas paired with unexpectedly spicy truffle coconut dips.',
       drinksScore: 4.6,
       drinksComment: 'Filter coffee pulled in traditional brass dabarah with frothy caramelized jaggery.',
       ambienceScore: 4.9,
-      ambienceComment: 'Giant wooden communal tables, game masters who teach rules in 3 minutes, cheerful energy.',
-      menuStyle: 'South Indian Coastal meets European Boardgame Parlor'
+      ambienceComment: 'Giant wooden communal tables, game masters who teach rules in 3 minutes, cheerful Mylapore buzz.',
+      menuStyle: 'South Indian Coastal meets Heritage Boardgame Parlor'
     },
     facilities: {
       vegFriendly: true,
@@ -107,17 +107,17 @@ export const INITIAL_CAFES: Cafe[] = [
     fusionItems: [
       {
         id: 'fi-3',
-        name: 'Truffle Masala Dosa Quesadilla Roll',
-        description: 'Crisp lentil crepe rolled with spiced spiced Yukon mash, Monterey Jack cheese, and black truffle oil drizzle.',
-        price: '$9.50',
+        name: 'Truffle Ghee Podi Dosa Quesadilla Roll',
+        description: 'Crisp lentil crepe rolled with spiced spiced potato mash, Monterey Jack cheese, and black truffle oil drizzle.',
+        price: '₹220',
         friendReaction: 'Marcus: "Ordered one for the table and ended up ordering two more because we fought over the last slice."'
       },
       {
         id: 'fi-4',
         name: 'Filter Kaapi Affogato',
-        description: 'Piping hot chicory decoction poured table-side over salted Madagascar vanilla gelato.',
-        price: '$6.00',
-        friendReaction: 'Maya: "The thermal contrast is ridiculous. Best game night dessert ever."'
+        description: 'Piping hot Kumbakonam chicory decoction poured table-side over salted Madagascar vanilla gelato.',
+        price: '₹180',
+        friendReaction: 'Maya: "The thermal contrast is ridiculous. Best game night dessert in Chennai."'
       }
     ],
     friendReviews: [
@@ -128,25 +128,25 @@ export const INITIAL_CAFES: Cafe[] = [
         avatarEmoji: '🎲',
         verdict: 'Must Visit',
         reviewText: 'Google reviews complained that it was too noisy on Friday night. Well yes, people are having genuine fun playing Catan! Book a table on WhatsApp 1 day prior.',
-        whatToOrder: 'Truffle Masala Dosa + Kaapi Affogato',
-        whatToAvoid: 'The paneer sandwich is dry, stick to the dosas',
+        whatToOrder: 'Truffle Podi Dosa + Kaapi Affogato',
+        whatToAvoid: 'The paneer sandwich is dry, stick to the hot dosas',
         visitedDate: '5 days ago',
         friendTrustBadge: 'Game Night Co-host · 12 shared visits'
       }
     ],
     strangerTruthComparison: {
       strangerRating: 3.9,
-      strangerQuote: '"Too loud for my baby, people were cheering loudly over wooden dice" — Stranger_901',
-      friendTruthSummary: 'Your friends love the vibrant energy! Perfect for 3-6 friend squads who want games + elite comfort food.'
+      strangerQuote: '"Too loud for my baby, people were cheering loudly over wooden dice" — RandomStranger_9',
+      friendTruthSummary: 'Your friends love the vibrant energy! Perfect for 3-6 friend squads who want games + elite comfort food in Mylapore.'
     }
   },
   {
     id: 'cafe-3',
     name: 'Velvet Dusk Rooftop & Botanical Bar',
     type: 'restaurant',
-    oneLinerTag: 'Lush sunset canopy with zero velvet-rope pretentious attitude',
-    neighborhood: 'Highline Terrace',
-    priceTier: '$$$',
+    oneLinerTag: 'Lush coastal sunset canopy with sea breezes and zero pretentious club noise',
+    neighborhood: 'ECR (East Coast Road), Chennai',
+    priceTier: '₹₹₹',
     friendMatchScore: 91,
     friendsVouchedCount: 6,
     rankingPosition: 3,
@@ -154,10 +154,10 @@ export const INITIAL_CAFES: Cafe[] = [
       foodScore: 4.7,
       foodComment: 'Smoked burrata with grilled peaches, fermented honey, and sourdough foccacia.',
       drinksScore: 4.9,
-      drinksComment: 'Clarified yuzu mezcal cocktails and natural orange biodynamic wines.',
+      drinksComment: 'Cold-pressed kokum spritzers and clarified yuzu botanical mocktails.',
       ambienceScore: 5.0,
-      ambienceComment: 'Unobstructed skyline view, real hanging philodendrons, dim Edison lamps, and chill acoustic jazz.',
-      menuStyle: 'Mediterranean Tapas & Botanical Aperitivo'
+      ambienceComment: 'Unobstructed Bay of Bengal sea breeze, real hanging philodendrons, dim Edison lamps, and chill acoustic jazz.',
+      menuStyle: 'Coastal Mediterranean Tapas & Cold-Pressed Botanical Bar'
     },
     facilities: {
       vegFriendly: true,
@@ -172,16 +172,16 @@ export const INITIAL_CAFES: Cafe[] = [
       {
         id: 'fi-5',
         name: 'Masala Chai Tiramisu with Pistachio Bark',
-        description: 'Ladyfingers soaked in double-strength Assam spiced black tea and rum, mascarpone cream infused with green cardamom.',
-        price: '$11.00',
-        friendReaction: 'Chloe: "I wanted to lick the ceramic plate. Far superior to coffee tiramisu."'
+        description: 'Ladyfingers soaked in double-strength Nilgiri spiced black tea, mascarpone cream infused with green cardamom.',
+        price: '₹380',
+        friendReaction: 'Chloe: "I wanted to lick the ceramic plate. Far superior to generic coffee tiramisu."'
       },
       {
         id: 'fi-6',
-        name: 'Matcha Wasabi Cacio e Pepe',
-        description: 'Handmade tagliolini tossed with Pecorino Romano, toasted black tellicherry pepper, and gentle ceremonial matcha.',
-        price: '$18.50',
-        friendReaction: 'Alex: "The savory matcha cut through the heavy cheese effortlessly. Pure magic."'
+        name: 'Curry Leaf & Passionfruit Spritzer',
+        description: 'Crisp sparkling botanical soda infused with flash-fried coastal curry leaves and fresh passionfruit pulp.',
+        price: '₹290',
+        friendReaction: 'Alex: "The savory curry leaf aroma with fizzy tart fruit is pure coastal magic."'
       }
     ],
     friendReviews: [
@@ -191,8 +191,8 @@ export const INITIAL_CAFES: Cafe[] = [
         avatarColor: '#588157',
         avatarEmoji: '🍸',
         verdict: 'Hidden Gem',
-        reviewText: 'Influencers on Instagram said it has a strict dress code. Total lie! We walked in wearing sneakers and jeans and the host was the sweetest human. Ask for seating near the west railing for sunset.',
-        whatToOrder: 'Chai Tiramisu & Clarified Yuzu spritz',
+        reviewText: 'Influencers on Instagram said it has a strict dress code. Total lie! We walked in wearing sneakers and linen shorts and the host was the sweetest human. Ask for seating near the east railing for the sunset sea breeze.',
+        whatToOrder: 'Chai Tiramisu & Curry Leaf Spritzer',
         whatToAvoid: 'The truffle fries are standard frozen ones, skip them',
         visitedDate: '1 week ago',
         friendTrustBadge: 'Sunset Hunter · 14 shared visits'
@@ -200,28 +200,28 @@ export const INITIAL_CAFES: Cafe[] = [
     ],
     strangerTruthComparison: {
       strangerRating: 4.1,
-      strangerQuote: '"Felt intimidated by photos online thinking it is a club" — GoogleUser_77',
+      strangerQuote: '"Felt intimidated by photos online thinking it is a nightclub" — GoogleUser_77',
       friendTruthSummary: 'It looks fancy in photos but is actually hyper-cozy, dog-friendly, and hospitable.'
     }
   },
   {
     id: 'cafe-4',
-    name: 'Neon Noodle & Bao Lab',
+    name: 'Kaviri Kaapi & Bao Lab',
     type: 'restaurant',
-    oneLinerTag: 'Slow-simmered bone broth and unexpected Mexican-Sichuan hand-pulled noodles',
-    neighborhood: 'Chinatown Lofts',
-    priceTier: '$$',
+    oneLinerTag: 'Chettinad spiced pulled jackfruit baos & hand-pulled noodles off KNK Road',
+    neighborhood: 'Nungambakkam, Chennai',
+    priceTier: '₹₹',
     friendMatchScore: 96,
     friendsVouchedCount: 8,
     rankingPosition: 4,
     criteria: {
       foodScore: 5.0,
-      foodComment: 'Chewy biang biang noodles slapped fresh to order, chili oil infused with roasted cacao.',
+      foodComment: 'Chettinad spiced biang biang noodles slapped fresh to order, chili oil infused with roasted fennel and star anise.',
       drinksScore: 4.5,
-      drinksComment: 'Salted plum sodas, smoked barley tea on tap, and Taiwan craft lagers.',
+      drinksComment: 'Madurai malli iced cold brews, salted nannari fizz on tap.',
       ambienceScore: 4.6,
       ambienceComment: 'Warm retro diner booths, open noodle theater counter, steam wafting in air.',
-      menuStyle: 'Sichuan Hand-Pulled Noodles & Oaxaca Birria Fusion'
+      menuStyle: 'Chettinad Meets Sichuan Hand-Pulled Noodles & Bao Lab'
     },
     facilities: {
       vegFriendly: true,
@@ -235,17 +235,17 @@ export const INITIAL_CAFES: Cafe[] = [
     fusionItems: [
       {
         id: 'fi-7',
-        name: 'Birria Hand-Pulled Biang Biang Noodles',
-        description: 'Wide ribbon noodles swimming in slow-cooked beef shank birria consommé with pickled shallots and cilantro chili oil.',
-        price: '$15.50',
-        friendReaction: 'David: "The best fusion dish created in our city in the last 5 years. Non-negotiable order."'
+        name: 'Chettinad Hand-Pulled Biang Biang Noodles',
+        description: 'Wide ribbon noodles swimming in slow-simmered Chettinad spiced broth with pickled shallots and curry leaf chili oil.',
+        price: '₹420',
+        friendReaction: 'David: "The best fusion dish created in Chennai in the last 5 years. Non-negotiable order."'
       },
       {
         id: 'fi-8',
-        name: 'Mala Crispy Enoki Mushroom Bao (Vegan)',
-        description: 'Fluffy steamed bao stuffed with crackling enoki fried with numbing Sichuan pepper and lime vegan mayo.',
-        price: '$9.00',
-        friendReaction: 'Elena: "Crispiest bite of your life, even meat-eaters were stealing mine."'
+        name: 'Crispy Podi Enoki Mushroom Bao (Vegan)',
+        description: 'Fluffy steamed bao stuffed with crackling enoki fried with gunpowder podi spices and lime vegan mayo.',
+        price: '₹310',
+        friendReaction: 'Elena: "Crispiest bite of your life, even non-vegetarians were stealing mine."'
       }
     ],
     friendReviews: [
@@ -255,8 +255,8 @@ export const INITIAL_CAFES: Cafe[] = [
         avatarColor: '#3A5A40',
         avatarEmoji: '🍜',
         verdict: 'Must Visit',
-        reviewText: 'Google has 3.8 stars because random tourists complained the noodle broth is too spicy. If you have an actual palate, this place is royalty. Get spice level 2 if you are sensitive.',
-        whatToOrder: 'Birria Biang Biang + Salted Plum Fizz',
+        reviewText: 'Google has 3.8 stars because tourists complained the Chettinad chili oil is too spicy. If you have an actual palate, this place is royalty. Get spice level 2 if you are sensitive.',
+        whatToOrder: 'Chettinad Biang Biang + Nannari Fizz',
         whatToAvoid: 'The scallion pancake is a bit oily, stick to the baos',
         visitedDate: 'Yesterday',
         friendTrustBadge: 'Late Night Noodle Guru · 22 shared visits'
@@ -265,27 +265,27 @@ export const INITIAL_CAFES: Cafe[] = [
     strangerTruthComparison: {
       strangerRating: 3.8,
       strangerQuote: '"Too spicy, my mouth was burning for an hour" — TouristReviewer',
-      friendTruthSummary: 'Squad score: 4.9. Don’t trust spice-averse tourists! The depth of chili oil and handmade chew is legendary.'
+      friendTruthSummary: 'Squad score: 4.9. Don’t trust spice-averse tourists! The depth of Chettinad roasted spices and handmade chew is legendary.'
     }
   },
   {
     id: 'cafe-5',
-    name: 'Sage & Ceramic Living Room',
+    name: 'The Whistling Kettle & Books',
     type: 'cafe',
-    oneLinerTag: 'Sip loose leaf oolong while surrounded by clay wheels and leafy pothos',
-    neighborhood: 'Greenway Basin',
-    priceTier: '$$',
+    oneLinerTag: 'Quiet second-hand bookstore cafe just two blocks from Bessy Beach',
+    neighborhood: 'Besant Nagar, Chennai',
+    priceTier: '₹₹',
     friendMatchScore: 93,
     friendsVouchedCount: 4,
     rankingPosition: 5,
     criteria: {
       foodScore: 4.5,
-      foodComment: 'Fluffy Japanese soufflé pancakes and toasted sesame sourdough.',
+      foodComment: 'Cardamom saffron soufflé pancakes and toasted sourdough melts.',
       drinksScore: 4.9,
-      drinksComment: 'Single-estate Taiwanese high mountain oolong and whipped matcha cloud cold brew.',
+      drinksComment: 'Single-estate Nilgiri whole leaf teas and whipped tender coconut cold brew cloud.',
       ambienceScore: 5.0,
-      ambienceComment: 'Sun-drenched skylights, handmade pottery you can drink from and purchase, zero rush.',
-      menuStyle: 'Ceramic Studio & Zen Tea Lounge'
+      ambienceComment: 'Sun-drenched skylights, vintage paperback collections, zero rush, quiet ocean breeze.',
+      menuStyle: 'Elliot’s Beach Literary Tea Room & Slow Bakes'
     },
     facilities: {
       vegFriendly: true,
@@ -299,10 +299,10 @@ export const INITIAL_CAFES: Cafe[] = [
     fusionItems: [
       {
         id: 'fi-9',
-        name: 'Whipped Matcha Ube Foam Cloud',
-        description: 'Ceremonial grade Uji matcha shaken with sweet coconut water, topped with purple sweet potato cream.',
-        price: '$7.20',
-        friendReaction: 'Zoe: "Not sickeningly sweet like Starbucks! Natural earthiness and silky foam."'
+        name: 'Tender Coconut & Jasmine Foam Cloud',
+        description: 'Single-origin cold brew poured over fresh tender coconut water, topped with Madurai jasmine floral foam.',
+        price: '₹260',
+        friendReaction: 'Zoe: "Light, floral, and naturally refreshing after walking down 6th Avenue in Besant Nagar."'
       }
     ],
     friendReviews: [
@@ -312,9 +312,9 @@ export const INITIAL_CAFES: Cafe[] = [
         avatarColor: '#BC6C25',
         avatarEmoji: '🍵',
         verdict: 'Hidden Gem',
-        reviewText: 'They serve drinks in wonky handmade clay mugs that feel so warm in your hands. Perfect spot to read a physical book on a rainy afternoon.',
-        whatToOrder: 'Matcha Ube Cloud + Black Sesame Souffle pancake',
-        whatToAvoid: 'No savoury dinner items, only teas and pastries',
+        reviewText: 'They serve drinks in wonky handmade clay kulhars that feel so warm in your hands. Perfect spot to read a physical book on a breezy Besant Nagar afternoon after walking on Bessy beach.',
+        whatToOrder: 'Tender Coconut Cloud + Cardamom Soufflé pancake',
+        whatToAvoid: 'No heavy dinner items, only teas and slow bakes',
         visitedDate: '4 days ago',
         friendTrustBadge: 'Slow Living Pal · 11 shared visits'
       }
@@ -322,7 +322,7 @@ export const INITIAL_CAFES: Cafe[] = [
     strangerTruthComparison: {
       strangerRating: 4.3,
       strangerQuote: '"Took 20 mins to get pancakes made fresh" — ImpatientUser_4',
-      friendTruthSummary: 'It’s a slow-living pottery haven. Go when you have 45 minutes to unplug and breathe.'
+      friendTruthSummary: 'It’s a slow-living bookstore haven. Go when you have 45 minutes to unplug, listen to the sea breeze, and breathe.'
     }
   }
 ];
@@ -342,7 +342,7 @@ export const INITIAL_USER: UserProfile = {
       cafeName: 'Mellow Hearth Roasters',
       visitDate: 'Oct 8, 2026',
       myRating: 5,
-      myNotes: 'Met Sarah and tested the Kimchi Gouda Croissant. Mind officially blown.',
+      myNotes: 'Met Sarah in Alwarpet and tested the Kimchi Gouda Croissant. Mind officially blown.',
       fusionTried: 'Kimchi Gouda Croissant'
     },
     {
@@ -350,8 +350,8 @@ export const INITIAL_USER: UserProfile = {
       cafeName: 'The Dueling Dosa & Dice',
       visitDate: 'Sep 29, 2026',
       myRating: 5,
-      myNotes: 'Won 2 games of Wingspan and ate 3 orders of Truffle Dosa rolls.',
-      fusionTried: 'Truffle Masala Dosa Quesadilla Roll'
+      myNotes: 'Won 2 games of Wingspan in Mylapore and ate 3 orders of Truffle Dosa rolls.',
+      fusionTried: 'Truffle Ghee Podi Dosa Quesadilla Roll'
     }
   ]
 };

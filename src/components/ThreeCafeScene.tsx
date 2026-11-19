@@ -182,11 +182,6 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
     wavyWallLight.position.set(-8.5, 4.5, 2);
     scene.add(wavyWallLight);
 
-    // Rattan pendant warm glow
-    const pendantLight = new THREE.PointLight('#FFA726', 1.5, 12);
-    pendantLight.position.set(-6, 6, 2.5);
-    scene.add(pendantLight);
-
     // -------------------------------------------------------------
     // MATERIALS PALETTE FROM REFERENCE IMAGES
     // -------------------------------------------------------------
@@ -571,21 +566,35 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
       ceilingGroup.add(beamZ);
     }
 
-    // Woven Rattan Basket Pendant Lamps (Ref Image 2)
+    // Woven Rattan Basket Pendant Lamps
     const rattanPendantGeo = new THREE.CylinderGeometry(0.7, 0.9, 1.1, 16);
-    const pendant1 = new THREE.Mesh(rattanPendantGeo, rattanMat);
-    pendant1.position.set(-6, -2.2, 2.5);
-    ceilingGroup.add(pendant1);
-
     const cordGeo = new THREE.CylinderGeometry(0.03, 0.03, 2.2, 8);
-    const cord1 = new THREE.Mesh(cordGeo, darkMetalMat);
-    cord1.position.set(-6, -1.1, 2.5);
-    ceilingGroup.add(cord1);
+
+    const addPendantLamp = (x: number, z: number) => {
+      const pendant = new THREE.Mesh(rattanPendantGeo, rattanMat);
+      pendant.position.set(x, -2.2, z);
+      ceilingGroup.add(pendant);
+
+      const cord = new THREE.Mesh(cordGeo, darkMetalMat);
+      cord.position.set(x, -1.1, z);
+      ceilingGroup.add(cord);
+
+      // Warm glow below the lamp
+      const lampGlow = new THREE.PointLight('#FFA726', 1.4, 10);
+      lampGlow.position.set(x, 6.3, z);
+      scene.add(lampGlow);
+    };
+
+    // Existing pendant lamp (above front seating at z = 2.5)
+    addPendantLamp(-6, 2.5);
+
+    // Added to the left side of the view (above rear-left seating at z = -3.5)
+    addPendantLamp(-6, -3.5);
 
     scene.add(ceilingGroup);
 
     // -------------------------------------------------------------
-    // 7. ENTRANCE CHALKBOARD EASEL: "Welcome to CafeGo" (Ref Image 1)
+    // 7. ENTRANCE CHALKBOARD EASEL: "Welcome to CafeGo" (Ref Image 1 Inspo)
     // -------------------------------------------------------------
     const createChalkboardTexture = () => {
       const canvas = document.createElement('canvas');
@@ -594,134 +603,77 @@ export const ThreeCafeScene: React.FC<ThreeCafeSceneProps> = ({
       const ctx = canvas.getContext('2d');
       if (!ctx) return null;
 
-      // 1. Deep slate chalkboard green base
-      ctx.fillStyle = '#1D2A20';
+      // Deep matte chalkboard slate base
+      ctx.fillStyle = '#17221A';
       ctx.fillRect(0, 0, 512, 768);
 
-      // Chalk dust & eraser smudge texture
-      for (let i = 0; i < 220; i++) {
+      // Subtle chalk dust / texture smudges
+      for (let i = 0; i < 180; i++) {
         const x = Math.random() * 512;
         const y = Math.random() * 768;
-        const r = Math.random() * 35 + 8;
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.025)';
+        const r = Math.random() * 32 + 6;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.022)';
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // Hand-drawn double chalk border
+      // Hand-drawn chalk border & corner leaf flourishes inspired by Pinterest A-frame boards
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(26, 26, 460, 716);
+      ctx.lineWidth = 3.5;
+      ctx.strokeRect(32, 32, 448, 704);
 
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 8]);
-      ctx.strokeRect(36, 36, 440, 696);
-      ctx.setLineDash([]);
+      // Corner botanical chalk leaves & vines (inspired by reference image)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.65)';
+      ctx.lineWidth = 2.5;
 
-      // Corner chalk loops
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.lineWidth = 3;
-      [[42, 42], [470, 42], [42, 726], [470, 726]].forEach(([cx, cy]) => {
+      const drawChalkCornerVine = (startX: number, startY: number, dirX: number, dirY: number) => {
         ctx.beginPath();
-        ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+        ctx.moveTo(startX, startY);
+        ctx.quadraticCurveTo(startX + dirX * 35, startY + dirY * 10, startX + dirX * 50, startY + dirY * 50);
         ctx.stroke();
-      });
 
-      // Hand-drawn chalk steaming coffee cup illustration at top
-      ctx.shadowColor = 'rgba(255, 255, 255, 0.9)';
-      ctx.shadowBlur = 6;
-      ctx.strokeStyle = '#FFFFFF';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
-      ctx.lineWidth = 4.5;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+        // Little chalk leaves
+        for (let t = 0.3; t <= 0.85; t += 0.28) {
+          const lx = startX + dirX * 45 * t;
+          const ly = startY + dirY * 45 * t;
+          ctx.beginPath();
+          ctx.ellipse(lx, ly, 7, 3.5, (dirX * dirY * Math.PI) / 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      };
 
-      // Cup body
-      ctx.beginPath();
-      ctx.arc(256, 138, 34, 0, Math.PI, false);
-      ctx.lineTo(290, 114);
-      ctx.lineTo(222, 114);
-      ctx.closePath();
-      ctx.stroke();
+      drawChalkCornerVine(45, 45, 1, 1);
+      drawChalkCornerVine(467, 45, -1, 1);
+      drawChalkCornerVine(45, 723, 1, -1);
+      drawChalkCornerVine(467, 723, -1, -1);
 
-      // Cup handle
-      ctx.beginPath();
-      ctx.arc(294, 128, 13, -Math.PI / 2, Math.PI / 2);
-      ctx.stroke();
-
-      // Saucer
-      ctx.beginPath();
-      ctx.moveTo(210, 175);
-      ctx.lineTo(302, 175);
-      ctx.stroke();
-
-      // Wavy steam lines
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(242, 98);
-      ctx.bezierCurveTo(236, 80, 248, 68, 244, 48);
-      ctx.moveTo(256, 94);
-      ctx.bezierCurveTo(252, 74, 264, 62, 258, 44);
-      ctx.moveTo(270, 98);
-      ctx.bezierCurveTo(266, 80, 278, 68, 272, 48);
-      ctx.stroke();
-
-      // Chalk sparkle stars
-      ctx.font = '22px sans-serif';
-      ctx.fillText('✦', 160, 140);
-      ctx.fillText('✦', 345, 140);
-
-      // Handwritten Chalk Text
+      // White chalk handwritten text: "Welcome to CafeGo"
       ctx.textAlign = 'center';
-
-      // 1. "Welcome" - Handwritten white chalk script
-      ctx.font = 'italic 700 66px "Caveat", "Brush Script MT", "Comic Sans MS", cursive, sans-serif';
+      ctx.textBaseline = 'middle';
       ctx.fillStyle = '#FFFFFF';
       ctx.shadowColor = 'rgba(255, 255, 255, 0.85)';
-      ctx.shadowBlur = 7;
-      ctx.fillText('Welcome', 256, 270);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-      ctx.fillText('Welcome', 257, 271); // textured double pass
+      ctx.shadowBlur = 9;
 
-      // 2. "to" - handwritten white chalk script
-      ctx.font = 'italic 600 42px "Caveat", "Comic Sans MS", cursive, sans-serif';
+      // 1. "Welcome" - Flowing cursive chalkboard calligraphy (from reference image)
+      ctx.font = 'italic 700 86px "Caveat", "Brush Script MT", "Comic Sans MS", cursive, sans-serif';
+      ctx.fillText('Welcome', 256, 290);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.fillText('Welcome', 257, 291);
+
+      // 2. "to" - Delicate chalk cursive
+      ctx.font = 'italic 600 46px "Caveat", "Comic Sans MS", cursive, sans-serif';
       ctx.fillStyle = 'rgba(250, 245, 235, 0.95)';
-      ctx.shadowBlur = 5;
-      ctx.fillText('~ to ~', 256, 338);
+      ctx.shadowBlur = 6;
+      ctx.fillText('to', 256, 385);
 
       // 3. "CafeGo" - Bold hand-drawn chalk title
-      ctx.font = '900 84px "Outfit", "Plus Jakarta Sans", sans-serif';
+      ctx.font = '900 96px "Outfit", "Plus Jakarta Sans", sans-serif';
       ctx.fillStyle = '#FFFFFF';
       ctx.shadowColor = 'rgba(255, 255, 255, 0.95)';
-      ctx.shadowBlur = 10;
-      ctx.fillText('CafeGo', 256, 442);
-
-      // Warm chalk underline swirl
-      ctx.lineWidth = 4.5;
-      ctx.strokeStyle = 'rgba(240, 150, 120, 0.95)'; // terracotta chalk accent
-      ctx.beginPath();
-      ctx.moveTo(115, 472);
-      ctx.bezierCurveTo(180, 484, 330, 462, 395, 476);
-      ctx.stroke();
-
-      // 4. Chalk sub-banner
-      ctx.font = 'bold 28px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = 'rgba(215, 235, 210, 0.95)'; // sage chalk accent
-      ctx.shadowColor = 'rgba(155, 177, 150, 0.7)';
-      ctx.shadowBlur = 5;
-      ctx.fillText('FRIEND-POWERED', 256, 540);
-
-      // 5. Chalk bottom notes
-      ctx.font = 'italic 600 32px "Caveat", cursive, sans-serif';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.shadowBlur = 4;
-      ctx.fillText('Honest Bites · Real Friends', 256, 605);
-
-      // Chalk icons at base
-      ctx.font = '28px sans-serif';
-      ctx.fillText('☕   ♡   ✨', 256, 665);
+      ctx.shadowBlur = 11;
+      ctx.fillText('CafeGo', 256, 495);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.anisotropy = 8;

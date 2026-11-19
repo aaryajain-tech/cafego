@@ -9,15 +9,15 @@ import { ARViewerModal } from './components/ARViewerModal';
 import { AboutModal } from './components/AboutModal';
 import { INITIAL_CAFES, INITIAL_USER } from './data/mockData';
 import { Cafe, FriendReview, UserProfile, CafePatron } from './types';
-import { 
-  Coffee, 
-  Search, 
-  Users, 
-  Camera, 
-  User, 
-  X, 
-  Sparkles, 
-  ShieldCheck, 
+import {
+  Coffee,
+  Search,
+  Users,
+  Camera,
+  User,
+  X,
+  Sparkles,
+  ShieldCheck,
   Flame,
   ChevronUp,
   SlidersHorizontal,
@@ -87,7 +87,7 @@ export default function App() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#F7F3EB] font-['Plus_Jakarta_Sans']">
-      
+
       {/* 1. COMPLETE WEB PAGE FULLSCREEN 3D WEBGL CAFE WORLD */}
       <ThreeCafeScene
         user={user}
@@ -100,15 +100,14 @@ export default function App() {
       {/* 2. FLOATING BOTTOM DOCK / NAVIGATION BAR */}
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[94%] sm:w-auto">
         <nav className="clay-card px-3 py-2 border-2 border-white/90 shadow-2xl backdrop-blur-lg flex items-center justify-between sm:justify-center gap-1.5 sm:gap-3">
-          
+
           {/* Explore Places Button */}
           <button
             onClick={() => setActivePanel(activePanel === 'discovery' ? null : 'discovery')}
-            className={`px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-              activePanel === 'discovery'
-                ? 'bg-[#2C241E] text-white shadow-md'
-                : 'text-[#4A3B30] hover:bg-black/5'
-            }`}
+            className={`px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activePanel === 'discovery'
+              ? 'bg-[#2C241E] text-white shadow-md'
+              : 'text-[#4A3B30] hover:bg-black/5'
+              }`}
             title="Browse all vouched cafes, restaurants, & reviews"
           >
             <Search className="w-4 h-4 text-[#9BB196]" />
@@ -119,11 +118,10 @@ export default function App() {
           {/* Friend Squads Button */}
           <button
             onClick={() => setActivePanel(activePanel === 'squads' ? null : 'squads')}
-            className={`px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-              activePanel === 'squads'
-                ? 'bg-[#2C241E] text-white shadow-md'
-                : 'text-[#4A3B30] hover:bg-black/5'
-            }`}
+            className={`px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activePanel === 'squads'
+              ? 'bg-[#2C241E] text-white shadow-md'
+              : 'text-[#4A3B30] hover:bg-black/5'
+              }`}
             title="Friend dining circle & referral perks"
           >
             <Users className="w-4 h-4 text-[#E07A5F]" />
@@ -159,72 +157,95 @@ export default function App() {
         </nav>
       </div>
 
-      {/* 3. SLIDE-OVER DRAWER FOR DISCOVERY & REVIEWS */}
+      {/* 3. CENTERED MODAL FOR DISCOVERY & REVIEWS (Chennai, India) */}
       {activePanel === 'discovery' && (
-        <div className="fixed inset-y-0 right-0 z-50 w-full max-w-2xl bg-[#F8F5EE]/95 backdrop-blur-xl border-l-2 border-white/80 shadow-2xl flex flex-col animate-slideLeft">
-          {/* Drawer Header */}
-          <div className="p-5 border-b border-[#E8DFD3] flex items-center justify-between gap-4 bg-[#F2EDE4]/60">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-[#9BB196] text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                <Search className="w-4 h-4 text-white" />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-8 bg-black/50 backdrop-blur-xs animate-fadeIn"
+          onClick={() => setActivePanel(null)}
+        >
+          <div
+            className="clay-card-warm w-full max-w-5xl max-h-[92vh] sm:max-h-[88vh] border-2 border-white shadow-2xl relative text-[#2C241E] flex flex-col overflow-hidden animate-modal-pop"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header with Chennai Badge */}
+            <div className="p-4 sm:p-5 border-b border-[#E8DFD3] flex items-center justify-between gap-4 bg-[#F2EDE4]/70 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-2xl bg-[#9BB196] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+                  <Search className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-extrabold text-xl text-[#2C221B] font-['Outfit']">
+                      CafeGo Discovery
+                    </h3>
+                    <span className="text-[11px] bg-[#EEF5EA] text-[#4F7344] px-2.5 py-0.5 rounded-full font-bold border border-[#D5E6CF] shadow-2xs">
+                      📍 Chennai, India
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#7A6453]">Verified friend scores across Alwarpet, Mylapore, ECR, Besant Nagar & Nungambakkam</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-extrabold text-lg text-[#2C221B] font-['Outfit']">
-                  CafeGo Discovery
-                </h3>
-                <p className="text-xs text-[#7A6453]">Verified friend scores vs Google stranger reviews</p>
-              </div>
+
+              <button
+                onClick={() => setActivePanel(null)}
+                className="p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-all hover:rotate-90 active:scale-90 cursor-pointer shrink-0"
+                title="Close (or tap outside to close)"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            <button
-              onClick={() => setActivePanel(null)}
-              className="p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Drawer Body: The Recommendation Engine */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-            <RecommendationSystem
-              cafes={cafes}
-              onSelectCafe={(cafe) => setSelectedCafe(cafe)}
-              onOpenAddReview={(cafe) => setReviewingCafe(cafe)}
-              onOpenARForDish={(dish) => handleLaunchAR(dish)}
-            />
+            {/* Modal Body: The Recommendation Engine with Infused Scrollbar */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 infused-scrollbar pr-3 sm:pr-6">
+              <RecommendationSystem
+                cafes={cafes}
+                onSelectCafe={(cafe) => setSelectedCafe(cafe)}
+                onOpenAddReview={(cafe) => setReviewingCafe(cafe)}
+                onOpenARForDish={(dish) => handleLaunchAR(dish)}
+              />
+            </div>
           </div>
         </div>
       )}
 
-      {/* 4. SLIDE-OVER DRAWER FOR FRIEND SQUADS & REFERRALS */}
+      {/* 4. CENTERED MODAL FOR FRIEND SQUADS & REFERRALS */}
       {activePanel === 'squads' && (
-        <div className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-[#F8F5EE]/95 backdrop-blur-xl border-l-2 border-white/80 shadow-2xl flex flex-col animate-slideLeft">
-          <div className="p-5 border-b border-[#E8DFD3] flex items-center justify-between gap-4 bg-[#F2EDE4]/60">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-[#E07A5F] text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                <Users className="w-4 h-4 text-white" />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-8 bg-black/50 backdrop-blur-xs animate-fadeIn"
+          onClick={() => setActivePanel(null)}
+        >
+          <div
+            className="clay-card-warm w-full max-w-5xl max-h-[92vh] sm:max-h-[88vh] border-2 border-white shadow-2xl relative text-[#2C241E] flex flex-col overflow-hidden animate-modal-pop"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4 sm:p-5 border-b border-[#E8DFD3] flex items-center justify-between gap-4 bg-[#F2EDE4]/70 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-2xl bg-[#E07A5F] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-xl text-[#2C221B] font-['Outfit']">
+                    Your Foodie Squad & Perks
+                  </h3>
+                  <p className="text-xs text-[#7A6453]">Invite friends, share authentic reviews & earn coffee tokens together</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-extrabold text-lg text-[#2C221B] font-['Outfit']">
-                  Your Foodie Squad & Perks
-                </h3>
-                <p className="text-xs text-[#7A6453]">Invite friends to unlock authentic reviews & coffee tokens</p>
-              </div>
+
+              <button
+                onClick={() => setActivePanel(null)}
+                className="p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-all hover:rotate-90 active:scale-90 cursor-pointer shrink-0"
+                title="Close (or tap outside to close)"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            <button
-              onClick={() => setActivePanel(null)}
-              className="p-2 rounded-xl text-[#7A6453] hover:bg-[#EAE2D6] transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-            <ReferralAndSquadSection
-              user={user}
-              onUpdateUser={handleUpdateUser}
-            />
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 infused-scrollbar pr-3 sm:pr-6">
+              <ReferralAndSquadSection
+                user={user}
+                onUpdateUser={handleUpdateUser}
+              />
+            </div>
           </div>
         </div>
       )}
